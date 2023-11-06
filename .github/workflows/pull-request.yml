@@ -23,6 +23,7 @@ jobs:
           uses: docker/build-push-action@v5
           with:
             file: .docker/xserver/Dockerfile
+            context: .docker/xserver
             push: false
             load: true
             tags: netris:xserver

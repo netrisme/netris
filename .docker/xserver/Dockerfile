@@ -35,8 +35,8 @@ ENV DISPLAY :0
 ENV PATH ${PATH}:/usr/local/nvidia/bin
 
 COPY xorg*.conf /etc/X11/
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+COPY entrypoint*.sh /
+RUN chmod +x /entrypoint*.sh
 
 VOLUME /var/run/appconfig
 
