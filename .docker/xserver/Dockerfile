@@ -1,10 +1,5 @@
 FROM ubuntu:jammy
 
-# Use GCE apt servers
-ARG GCE_ZONE=us-west1
-RUN cp /etc/apt/sources.list /etc/apt/sources.list.orig && \
-    sed -i "s/archive.ubuntu.com/${GCE_ZONE}.gce.archive.ubuntu.com/g" /etc/apt/sources.list
-
 # Install base dependencies
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         xserver-xorg-core \
