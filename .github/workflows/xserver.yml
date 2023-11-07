@@ -27,6 +27,7 @@ jobs:
   build-docker-xserver-pr:
       name: Build xserver image on pr
       runs-on: ubuntu-latest
+      if: ${{ github.event_name == 'pull_request' }}
       steps:
         -
           name: Checkout repo
@@ -45,7 +46,7 @@ jobs:
             tags: netris:xserver
   build-docker-xserver-main:
       name: Build xserver image on push 2 main
-      if: github.ref == 'refs/heads/main'
+      if: ${{github.ref == 'refs/heads/main'}}
       runs-on: ubuntu-latest
       permissions:
         contents: read
