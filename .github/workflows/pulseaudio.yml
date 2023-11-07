@@ -10,7 +10,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docker/pulseaudio/**'
+      - '.docker/pulseaudio/**'
       - ".github/pulseaudio.yml"
     tags:
       - v*.*.*
