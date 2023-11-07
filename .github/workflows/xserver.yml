@@ -45,7 +45,7 @@ jobs:
             load: true
             tags: netris:xserver
   build-docker-xserver-main:
-      name: Build xserver image on push 2 main
+      name: Build xserver image on merge
       if: ${{github.ref == 'refs/heads/main'}}
       runs-on: ubuntu-latest
       permissions:
