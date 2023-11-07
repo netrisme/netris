@@ -3,14 +3,14 @@ name: CI for .docker/xserver
 on:
   pull_request:
    paths:
-    - 'docker/xserver/**'
+    - '.docker/xserver/**'
     - ".github/xserver.yml"
   schedule:
     - cron: 0 0 * * * # At the end of everyday
   push:
     branches: [main]
     paths:
-      - 'docker/xserver/**'
+      - '.docker/xserver/**'
       - ".github/xserver.yml"
     tags:
       - v*.*.*
@@ -43,7 +43,7 @@ jobs:
             push: false
             load: true
             tags: netris:xserver
-            
+
   build-docker-xserver-main:
       name: Build xserver image on merge
       if: ${{github.ref == 'refs/heads/main'}}
