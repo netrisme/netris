@@ -1,0 +1,29 @@
+name: CI for .docker/pulseaudio
+
+on:
+  pull_request:
+   paths:
+    - ".docker/pulseaudio/**"
+    #when dependabot bumps a workflow version, we want to see how it works
+    - ".github/pulseaudio.yml"
+
+jobs:
+  build-docker-xserver:
+      name: Build base Docker image
+      runs-on: ubuntu-latest
+      steps:
+        -
+          name: Checkout repo
+          uses: actions/checkout@v4
+        - 
+          name: Setup Docker Buildx
+          uses: docker/setup-buildx-action@v3
+        - 
+          name: Build Docker image
+          uses: docker/build-push-action@v5
+          with:
+            file: .docker/pulseaudio/Dockerfile
+            context: .docker/pulseaudio
+            push: false
+            load: true
+            tags: netris:pulseaudio
