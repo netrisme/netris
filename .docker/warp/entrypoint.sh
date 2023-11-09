@@ -23,6 +23,8 @@ export WARP_FULL_URL="${URL:-"https://$WARP_ADDRESS/$URL_NAME"}"
 
 echo "INFO: catch the stream at ${WARP_FULL_URL}"
 
+#test text here
+
 export PULSE_SERVER="${PULSE_SERVER:-127.0.0.1:4713}"
 
 #1920x1080
