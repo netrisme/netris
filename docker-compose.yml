@@ -1,13 +1,13 @@
 version: '3'
 services:
   pulseaudio:
-    build: ./.docker/pulseaudio/Dockerfile
+    image: ghcr.io/netrisme/netris/pulseaudio:nightly
     container_name: pulseaudio_server
     networks:
       - audio_network
 
   ffmpeg:
-    build: ./.docker/warp/Dockerfile
+    build: ghcr.io/netrisme/netris/warp:nightly
     container_name: warp_client
     depends_on:
       - pulseaudio
@@ -21,7 +21,7 @@ services:
       PULSE_SERVER: "pulseaudio:4713"
 
   xserver:
-    build: ./.docker/xserver/Dockerfile
+    build: ghcr.io/netrisme/netris/xserver:nightly
     container_name: xserver
     volumes:
       - x11-socket:/tmp/.X11-unix
