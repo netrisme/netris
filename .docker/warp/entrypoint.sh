@@ -24,8 +24,4 @@ export WARP_FULL_URL="${URL:-"https://$WARP_ADDRESS/$URL_NAME"}"
 echo "INFO: catch the stream at ${WARP_FULL_URL}"
 
 #1920x1080
-ffmpeg -hide_banner -loglevel error -s ${MAX_WINDOW_WIDTH}x${MAX_WINDOW_HEIGHT} -r 30 -f x11grab -i :0 -f pulse -re -i tcp:${PULSE_SERVER} -f mp4 -streaming 1 -movflags empty_moov+frag_every_frame+separate_moof+omit_tfhd_offset - | /usr/bin/warp -- ${WARP_FULL_URL}
-
-
-#gst-launch-1.0 -e ... ! x264enc ... ! h264parse ! mp4mux streamable=true fragment-duration=100 presentation-time=true ! ...
-#gst-launch-1.0 -v ximagesrc use-damage=0 ! videoconvert ! videoscale ! video/x-raw,width=${MAX_WINDOW_WIDTH},height=${MAX_WINDOW_HEIGHT},framerate=30/1 ! x264enc tune=zerolatency bitrate=5000 ! mp4mux streamable=true ! fdsink fd=1 pulsesrc device=${PULSE_DEVICE} ! audioconvert ! voaacenc bitrate=128000 ! queue ! mux.
+ffmpeg -hide_banner -loglevel error -s ${MAX_WINDOW_WIDTH}x${MAX_WINDOW_HEIGHT} -r 30 -f x11grab -i :0 -f pulse -re -i tcp:${PULSE_SERVER} -f mp4 -streaming 1 -movflags empty_moov+frag_every_frame+separate_moof+omit_tfhd_offset - | /usr/bin/warp -- https:fly-moq-relay.englishm.net:4443/$URL_NAME
