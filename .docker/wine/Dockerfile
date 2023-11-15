@@ -54,7 +54,11 @@ FROM builder-config as builder
 
 # Configure WineCX
 WORKDIR /wine-build
-RUN /wine-source/configure --enable-win64;
+RUN /wine-source/configure \
+            --prefix= \
+            --disable-tests \
+            --disable-winedbg \
+            --enable-win64;
 
 #make and install wine64
 RUN make -j "$(nproc)"
