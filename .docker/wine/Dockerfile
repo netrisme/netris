@@ -10,7 +10,7 @@ RUN apt-get update -y; \
     apt-get update; \
     apt-get install -y \
     wget software-properties-common apt-transport-https gnupg2 build-essential git\
-    locales tzdata git vim curl \
+    locales tzdata git vim curl ca-certificates \
     make gcc ccache gcc-multilib flex bison gcc-mingw-w64 pkg-config \
     libx11-dev:* libfreetype-dev:* \
     libxcursor-dev:* libxi-dev:* libxext-dev:* \
@@ -34,14 +34,21 @@ RUN apt-get update -y; \
 
 # Clone the WineCX source code
 WORKDIR /wine-source
-RUN git clone https://github.com/Gcenx/winecx .
+#FIXME: for some reason git cannot access github because of some certification issue
+RUN git config --global http.sslverify false;\
+    git clone https://github.com/Gcenx/winecx .
 
 # Set locale to avoid potential issues
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-RUN apt-get update -y \
-    && apt-get install -y gstreamer1.0-plugins-base:* gstreamer1.0-plugins-good:* gstreamer1.0-plugins-bad:* gstreamer1.0-plugins-ugly:* gstreamer1.0-libav:*
+RUN apt-get update -y;\
+     apt-get install -y \
+     gstreamer1.0-plugins-base:* \
+     gstreamer1.0-plugins-good:* \
+     gstreamer1.0-plugins-bad:* \
+     gstreamer1.0-plugins-ugly:* \
+     gstreamer1.0-libav:*
 
 # Configure and compile WineCX
 WORKDIR /wine64-build
