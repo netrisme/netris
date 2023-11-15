@@ -19,7 +19,7 @@ export WARP_ADDRESS="${WARP_ADDRESS:-$WARP_SERVER_HOST:$WARP_SERVER_PORT}"
 URL_NAME="${NAME:-$(head /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | head -c 16)}"
 
 #Full server url
-export WARP_FULL_URL="${URL:-"https://$WARP_ADDRESS/$URL_NAME"}"
+export WARP_FULL_URL="${URL:-"https://fly-moq-relay.englishm.net:4443/$URL_NAME"}"
 
 echo "INFO: catch the stream at ${WARP_FULL_URL}"
 
