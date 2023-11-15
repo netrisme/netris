@@ -10,7 +10,7 @@ RUN apt-get update -y; \
     apt-get update; \
     apt-get install -y \
     wget software-properties-common apt-transport-https gnupg2 build-essential git\
-    locales tzdata git vim curl ca-certificates \
+    locales tzdata git vim curl ca-certificates ca-certificates  update-ca-certificates \
     make gcc ccache gcc-multilib flex bison gcc-mingw-w64 pkg-config \
     libx11-dev:* libfreetype-dev:* \
     libxcursor-dev:* libxi-dev:* libxext-dev:* \
@@ -35,9 +35,8 @@ RUN apt-get update -y; \
 
 # Clone the WineCX source code
 WORKDIR /wine-source
-#FIXME: for some reason git cannot access github because of some certification issue
-RUN git config --global http.sslverify false;\
-    git clone https://github.com/Gcenx/winecx .
+#FIXME: for some reason git cannot access github because of some certification issue #git config --global http.sslverify false;\
+RUN git clone https://github.com/Gcenx/winecx .
 
 # Set locale to avoid potential issues
 RUN locale-gen en_US.UTF-8
@@ -46,10 +45,11 @@ ENV LANG en_US.UTF-8
 # Configure and compile WineCX
 WORKDIR /wine64-build
 RUN /wine-source/configure --enable-win64; \
-    make -j$(nproc);
-    # make install
+    make -j$(nproc); \
+    mkdir -p /wine64; \
+    make install DESTDIR=/wine64
 
-RUN ls -l /wine64-build
+RUN ls -l /wine64
 
 # Set up the final container
 # FROM ubuntu:jammy
