@@ -10,7 +10,7 @@ RUN apt-get update -y; \
     apt-get update; \
     apt-get install -y \
     wget software-properties-common apt-transport-https gnupg2 build-essential git\
-    locales tzdata git vim curl ca-certificates ca-certificates  update-ca-certificates \
+    locales tzdata git vim curl ca-certificates \
     make gcc ccache gcc-multilib flex bison gcc-mingw-w64 pkg-config \
     libx11-dev:* libfreetype-dev:* \
     libxcursor-dev:* libxi-dev:* libxext-dev:* \
