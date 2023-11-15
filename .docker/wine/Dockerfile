@@ -5,93 +5,52 @@ FROM ubuntu:jammy as builder
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary build dependencies
-RUN dpkg --add-architecture i386; \
+RUN apt-get update -y; \
+    dpkg --add-architecture i386; \
     apt-get update; \
     apt-get install -y \
-    wget \
-    software-properties-common \
-    apt-transport-https \
-    gnupg2 \
-    build-essential \
-    git \
-    gcc \
-    make \
-    flex \
-    bison \
-    libx11-dev \
-    libfreetype6-dev \
-    libgl1-mesa-dev \
-    libglu1-mesa-dev \
-    libgnutls28-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libosmesa6-dev \
-    libsdl2-dev \
-    libvkd3d-dev \
-    libxcomposite-dev \
-    libxcursor-dev \
-    libxi-dev \
-    libxinerama-dev \
-    libxrandr-dev \
-    libxslt1-dev \
-    libxxf86vm-dev \
-    libvulkan1 \
-    libvulkan-dev \
-    libudev-dev \
-    libpcap0.8-dev \
-    libdbus-1-dev \
-    libncurses5-dev \
-    libncursesw5-dev \
-    libpulse-dev \
-    libcapi20-dev \
-    libmpg123-dev \
-    libopenal-dev \
-    libldap2-dev \
-    libsane-dev \
-    libv4l-dev \
-    ocl-icd-opencl-dev \
-    libgphoto2-dev \
-    libgstreamer1.0-dev \
-    libgstreamer-plugins-base1.0-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libgnutls28-dev \
-    libjpeg-dev \
-    libxml2-dev \
-    libtiff-dev \
-    prelink \
-    libtiff5-dev \
-    libpng-dev \
-    libssl-dev \
-    libcups2-dev \
-    libfreetype6-dev \
-    libfontconfig1-dev \
-    libgsm1-dev \
-    libkrb5-dev \
-    libmpg123-dev \
-    libgstreamer-plugins-base1.0-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev \
-    libavfilter-dev; \
+    make gcc ccache gcc-multilib flex bison gcc-mingw-w64 pkg-config \
+    libx11-dev:* libfreetype-dev:* \
+    libxcursor-dev:* libxi-dev:* libxext-dev:* \
+    libxxf86vm-dev:* libxrandr-dev:* libxinerama-dev:* \
+    libxcomposite-dev:* libgl1-mesa-glx:* libgl1-mesa-dri:* \
+    libosmesa6-dev:* libpcap-dev:* libdbus-1-dev:* libsane-dev:* \
+    libusb-1.0-0-dev:* libv4l-dev:* libgphoto2-dev:* \
+    liblcms2-dev:* libpulse-dev:* libgstreamer-plugins-base1.0-dev:* \
+    libudev-dev:* libsdl2-dev:* libfaudio-dev:* \
+    libcapi20-dev:* libcups2-dev:* libfontconfig-dev:* \
+    libgsm1-dev:* libkrb5-dev:* libjxr-dev:* \
+    libmpg123-dev:* libvulkan-dev:* \
+    libvkd3d-dev:* libldap2-dev:* \
+    libxml2-dev:* libxslt1-dev:* libgnutls28-dev:* \
+    oss4-dev gettext; \
     rm -rf /var/lib/apt/lists/*
+
+#Other
+RUN apt-get update -y; \
+	 apt-get install -y --no-install-recommends wget locales tzdata; \
+	 apt-get clean; \
+     rm -rf /var/lib/apt/lists/*
 
 # Clone the WineCX source code
 RUN git clone https://github.com/Gcenx/winecx.git /wine-source
-WORKDIR /wine-source
-
-# Configure and compile WineCX
-# Note: you may want to run the configure script with specific flags depending on your requirements
-RUN mkdir -p /wine-install; \
-    ./configure; \
-    make -j$(nproc); \
-    make install DESTDIR=/wine-install
 
 # Set locale to avoid potential issues
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-# Set up the final container
-FROM ubuntu:jammy
+RUN apt-get update -y \
+    && apt-get install -y gstreamer1.0-plugins-base:* gstreamer1.0-plugins-good:* gstreamer1.0-plugins-bad:* gstreamer1.0-plugins-ugly:* gstreamer1.0-libav:*
 
-COPY --from=builder /wine-install /
+# Configure and compile WineCX
+WORKDIR /wine64-build
+RUN /wine-source/configure --enable-win64; \
+    make -j$(nproc);
+    # make install
+
+RUN ls -l /wine64-build
+
+# Set up the final container
+# FROM ubuntu:jammy
+
+# COPY --from=builder /wine-install /
