@@ -52,13 +52,19 @@ ENV LANG en_US.UTF-8
 #Build x64 wine
 FROM builder-config as builder
 
+ARG CROSSCFLAGS="-g -O2"
+ARG CFLAGS="${CROSSCFLAGS} -Wno-deprecated-declarations -Wno-format"
+
 # Configure WineCX
 WORKDIR /wine-build
-RUN /wine-source/configure \
+RUN /wine-source/configure  CROSSCC="ccache x86_64-w64-mingw32-gcc"\
             --prefix= \
             --disable-tests \
             --disable-winedbg \
-            --enable-win64;
+            --enable-win64 \
+            --disable-mscms \
+            --without-gstreamer \
+            --with-vulkan
 
 #make and install wine64
 RUN make -j "$(nproc)"
