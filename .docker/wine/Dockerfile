@@ -27,14 +27,14 @@ RUN apt-get update -y; \
     libxml2-dev:* libxslt1-dev:* libgnutls28-dev:* \
     oss4-dev gettext; \
     #fix broken packages
-    apt --fix-broken install ;\
+    apt --fix-broken install -y;\
     #clean
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
 # Clone the WineCX source code
 WORKDIR /wine-source
-RUN git clone https://github.com/Gcenx/winecx.git .
+RUN git clone https://github.com/Gcenx/winecx .
 
 # Set locale to avoid potential issues
 RUN locale-gen en_US.UTF-8
