@@ -9,6 +9,8 @@ RUN apt-get update -y; \
     dpkg --add-architecture i386; \
     apt-get update; \
     apt-get install -y \
+    wget software-properties-common apt-transport-https gnupg2 build-essential git\
+    locales tzdata git vim curl \
     make gcc ccache gcc-multilib flex bison gcc-mingw-w64 pkg-config \
     libx11-dev:* libfreetype-dev:* \
     libxcursor-dev:* libxi-dev:* libxext-dev:* \
@@ -24,13 +26,11 @@ RUN apt-get update -y; \
     libvkd3d-dev:* libldap2-dev:* \
     libxml2-dev:* libxslt1-dev:* libgnutls28-dev:* \
     oss4-dev gettext; \
+    #fix broken packages
+    apt --fix-broken install ;\
+    #clean
+    apt-get clean; \
     rm -rf /var/lib/apt/lists/*
-
-#Other
-RUN apt-get update -y; \
-	 apt-get install -y --no-install-recommends wget locales tzdata git vim curl; \
-	 apt-get clean; \
-     rm -rf /var/lib/apt/lists/*
 
 # Clone the WineCX source code
 WORKDIR /wine-source
