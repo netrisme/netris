@@ -14,9 +14,7 @@ RUN sed -i -E 's/^# deb-src /deb-src /g' /etc/apt/sources.list; \
 WORKDIR /wine-source
 RUN git clone https://github.com/Gcenx/winecx .
 
-# Set locale to avoid potential issues
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
+#set build envs
 ENV CC=clang
 ENV CXX=clang
 ENV CFLAGS="-I/usr/local/include"
