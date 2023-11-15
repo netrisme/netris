@@ -43,14 +43,6 @@ RUN git config --global http.sslverify false;\
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-RUN apt-get update -y;\
-     apt-get install -y \
-     
-     
-     
-     
-     
-
 # Configure and compile WineCX
 WORKDIR /wine64-build
 RUN /wine-source/configure --enable-win64; \
