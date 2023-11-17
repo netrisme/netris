@@ -34,7 +34,7 @@ services:
       - pulseaudio
       - xserver
     volumes:
-      - $(pwd)/game:/home/netris/game
+      - $(pwd)/game:/game
       - x11-socket:/tmp/.X11-unix
       - shared-data:/var/run/appconfig
     networks:
