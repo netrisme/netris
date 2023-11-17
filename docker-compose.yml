@@ -1,0 +1,52 @@
+version: '3'
+services:
+  pulseaudio:
+    image: ghcr.io/netrisme/netris/pulseaudio:nightly
+    container_name: netris-pulseaudio_server
+    networks:
+      - audio_network
+
+  ffmpeg:
+    image: ghcr.io/netrisme/netris/warp:nightly
+    container_name: netris-warp_client
+    depends_on:
+      - pulseaudio
+      - xserver
+    networks:
+      - audio_network
+    volumes:
+      - x11-socket:/tmp/.X11-unix
+      - shared-data:/var/run/appconfig
+    environment:
+      PULSE_SERVER: "pulseaudio:4713"
+
+  xserver:
+    image: ghcr.io/netrisme/netris/xserver:nightly
+    container_name: netris-xserver
+    volumes:
+      - x11-socket:/tmp/.X11-unix
+      - shared-data:/var/run/appconfig
+    
+  wine:
+    image: ghcr.io/netrisme/netris/xserver:nightly
+    container_name: netris-wine
+    depends_on:
+      - pulseaudio
+      - xserver
+    volumes:
+      - $(pwd)/game:/game
+      - x11-socket:/tmp/.X11-unix
+      - shared-data:/var/run/appconfig
+    networks:
+      - audio_network
+    environment:
+      PULSE_SERVER: "pulseaudio:4713"
+
+networks:
+  audio_network:
+    driver: bridge
+volumes:
+  x11-socket:
+    driver: local
+  shared-data:
+    driver: local

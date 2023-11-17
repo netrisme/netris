@@ -23,7 +23,5 @@ export WARP_FULL_URL="${URL:-"https://$WARP_ADDRESS/$URL_NAME"}"
 
 echo "INFO: catch the stream at ${WARP_FULL_URL}"
 
-export PULSE_SERVER="${PULSE_SERVER:-127.0.0.1:4713}"
-
 #1920x1080
-ffmpeg -hide_banner -loglevel error -s ${MAX_WINDOW_WIDTH}x${MAX_WINDOW_HEIGHT} -r 30 -f x11grab -i :0 -f pulse -re -i tcp:${PULSE_SERVER} -f mp4 -streaming 1 -movflags empty_moov+frag_every_frame+separate_moof+omit_tfhd_offset - | /usr/bin/warp -- ${WARP_FULL_URL}
+ffmpeg -hide_banner -loglevel error -s ${MAX_WINDOW_WIDTH}x${MAX_WINDOW_HEIGHT} -r 30 -f x11grab -i :0 -f pulse -re -i tcp:${PULSE_SERVER} -f mp4 -streaming 1 -movflags empty_moov+frag_every_frame+separate_moof+omit_tfhd_offset - | /usr/bin/warp -- https:fly-moq-relay.englishm.net:4443/$URL_NAME
