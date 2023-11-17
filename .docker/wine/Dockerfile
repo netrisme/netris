@@ -54,13 +54,18 @@ ARG USERNAME=netris
 #
 #Create a non-root user `admin`
 RUN apt-get update; \
-    #
-    #create a non-root user
-    useradd --create-home --shell /bin/bash ${USERNAME};\
-    usermod -a -G adm,audio,input,pulse-access,sudo,tape,tty,video ${USERNAME};\
-    #
-    #Remove sudo password
-    echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+     #
+     #create a non-root user
+     useradd --create-home --shell /bin/bash ${USERNAME};\
+     usermod -a -G adm,audio,input,pulse-access,sudo,tape,tty,video ${USERNAME};\
+     #
+     #Remove sudo password
+     echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers;\ 
+     #
+     #make directories for netris
+     mkdir -p /game; \
+     chmod 1777 /game;\
+     chown ${USERNAME} /game
 
 #FIXME: do we need tini really? Wine needs to start subprocesses like the wineserver for it to work
 # # Add Tini
@@ -71,7 +76,7 @@ RUN apt-get update; \
 COPY entrypoint*.sh /
 RUN chmod +x /entrypoint*.sh
 
-VOLUME /var/run/appconfig
+VOLUME ["/var/run/appconfig","/game"]
 
 USER netris
 WORKDIR /home/netris
